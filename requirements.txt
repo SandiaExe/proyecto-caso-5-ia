@@ -1,0 +1,9 @@
+# requirements.txt
+numpy
+scikit-fuzzy
+fastapi
+pydantic
+uvicorn
+scipy
+packaging
+networkx   # <--- ¡Añadir esta línea!

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clasificador de Servicio Fuzzy</title>
+</head>
+<body>
+    <h1>Clasificador de Calidad de Servicio</h1>
+    <label for="espera">Tiempo de Espera (min):</label>
+    <input type="number" id="espera" value="45"><br><br>
+    
+    <label for="comida">Calidad de Comida (0-10):</label>
+    <input type="number" id="comida" value="7.5"><br><br>
+    
+    <button onclick="obtenerClasificacion()">Clasificar Servicio</button>
+    
+    <p id="resultado">Puntuación: </p>
+
+    <script>
+        // ESTA URL DEBE SER REEMPLAZADA POR TU URL DE AZURE
+        const API_URL = "https://TU-SERVICIO-AZURE.azurewebsites.net/clasificar"; 
+
+        async function obtenerClasificacion() {
+            const tiempo = parseFloat(document.getElementById('espera').value);
+            const comida = parseFloat(document.getElementById('comida').value);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tiempo_espera: tiempo,
+                        calidad_comida: comida
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('resultado').innerText = 
+                    `Puntuación Final: ${data.puntuacion_final} / 100`;
+
+            } catch (error) {
+                document.getElementById('resultado').innerText = "Error al conectar con la API.";
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
