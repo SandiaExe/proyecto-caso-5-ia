@@ -16,14 +16,18 @@
     <p id="resultado">Puntuación: </p>
 
     <script>
-        // ESTA URL DEBE SER REEMPLAZADA POR TU URL DE AZURE
-        const API_URL = "https://TU-SERVICIO-AZURE.azurewebsites.net/clasificar"; 
+        // *******************************************************************
+        // CAMBIO CLAVE: Usamos una URL relativa que Vercel resuelve al mismo dominio.
+        // Vercel a menudo envuelve las APIs de Python en la ruta /api
+        // *******************************************************************
+        const API_URL = "/api/clasificar"; 
 
         async function obtenerClasificacion() {
             const tiempo = parseFloat(document.getElementById('espera').value);
             const comida = parseFloat(document.getElementById('comida').value);
 
             try {
+                // La función 'fetch' usará automáticamente: https://proyecto-caso-5-ia.vercel.app/api/clasificar
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -33,12 +37,18 @@
                     })
                 });
 
+                // Si la respuesta no es 200 OK, lanzamos un error para ir al catch
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status} ${response.statusText}`);
+                }
+
                 const data = await response.json();
                 document.getElementById('resultado').innerText = 
                     `Puntuación Final: ${data.puntuacion_final} / 100`;
 
             } catch (error) {
-                document.getElementById('resultado').innerText = "Error al conectar con la API.";
+                // Mostramos el error de conexión o el error HTTP
+                document.getElementById('resultado').innerText = "Error al conectar con la API. Detalles en la consola.";
                 console.error('Error:', error);
             }
         }
