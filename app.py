@@ -92,6 +92,10 @@ clasificador_servicio = ctrl.ControlSystemSimulation(control_sistema)
 # PASO 3: Definición del Endpoint (Ruta) de la API
 # -----------------------------------------------------
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.post("/clasificar")
 def clasificar(request: ClasificacionRequest):
     """
@@ -132,3 +136,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     print(f"Iniciando API localmente en el puerto {port}...")
     uvicorn.run("api_servicio:app", host="0.0.0.0", port=port, reload=True)
+
